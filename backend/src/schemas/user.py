@@ -17,7 +17,7 @@ class User:
     
     @try_except
     def __str__(self) -> str:
-        return f"username: {self.username}\nemail: {self.email}\npassword: {self.password}\n{self.wallet}"
+        return f"username: {self.username}\nemail: {self.email}\npassword: {self.password}\n{self.wallet}"  
         
     
 class UserRequest(BaseModel):

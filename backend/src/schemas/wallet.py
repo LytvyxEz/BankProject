@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field, EmailStr
 import datetime
 
 from schemas.enums import Card_enum
-from uttils.deco import try_except
+from uttils.try_except_deco import try_except
 from schemas.user import User
 from uttils.security_code import create_security_code
         

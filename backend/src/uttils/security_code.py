@@ -1,7 +1,7 @@
 from random import randint
 import datetime
 
-from uttils.deco import try_except
+from .try_except_deco import try_except
 
 
 @try_except

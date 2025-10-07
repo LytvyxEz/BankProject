@@ -3,7 +3,7 @@ from pydantic import EmailStr
 from schemas.enums import Card_enum 
 from schemas.user import User
 from schemas.wallet import Wallet
-from uttils.deco import try_except
+from uttils.try_except_deco import try_except
 
 class Bank:
     @try_except

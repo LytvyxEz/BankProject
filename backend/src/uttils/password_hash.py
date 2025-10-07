@@ -1,6 +1,6 @@
 from bcrypt import hashpw, checkpw, gensalt
 
-from uttils.deco import try_except
+from .try_except_deco import try_except
 
 @try_except
 def hash_password(password: str) -> str:
