@@ -18,14 +18,13 @@ class Bank:
     
     @staticmethod
     @try_except
-    def create_user(username: str, email: EmailStr, password: str) -> dict:
+    def login_register(username: str, email: EmailStr, password: str) -> dict:
         user = User.create_user(username, email, password)
         return {
             "username": user.username,
             "email": user.email,
             "password": user.password
         }
-
 
     
     @try_except

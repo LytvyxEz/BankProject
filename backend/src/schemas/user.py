@@ -1,4 +1,4 @@
-from pydantic import EmailStr, BaseModel, Field
+from pydantic import EmailStr, BaseModel, Field, field_validator, model_validator
 
 from uttils import try_except, hash_password
 
@@ -24,3 +24,16 @@ class UserRequest(BaseModel):
     username: str = Field(min_length=3)
     email: EmailStr = Field()
     password: str = Field()
+    
+    
+class UserRequestRegister(BaseModel):
+    username: str = Field(min_length=3)
+    email: EmailStr
+    password: str
+    password2: str
+
+    @model_validator(mode='after')
+    def check_passwords_match(self):
+        if self.password != self.password2:
+            raise ValueError("Passwords do not match")
+        return self

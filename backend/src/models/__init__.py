@@ -1,1 +1,2 @@
-from .user import User_orm
+from .user import UserOrm
+from .wallet import WalletOrm

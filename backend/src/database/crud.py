@@ -1,22 +1,38 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from models import User_orm
+from models import UserOrm
 from schemas import UserRequest
 
 from .session import get_db
+from uttils import verify_password
 
 
 def create_user(user_data: dict, db: Session):
-    db_user = db.query(User_orm).filter(User_orm.email == user_data["email"]).first()
+    db_user = db.query(UserOrm).filter(UserOrm.email == user_data["email"]).first()
     if db_user:
         raise HTTPException(status_code=400, detail="User already exists")
 
-    new_user = User_orm(**user_data)
+    new_user = UserOrm(**user_data)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
     return new_user
 
 
+def login_user(user_data: dict, db: Session):
+    db_user = db.query(UserOrm).filter(UserOrm.email == user_data["email"]).first()
+    
+    if not db_user:
+        raise HTTPException(status_code=400, detail='User does not exists')
+
+    if not verify_password(user_data['password'], db_user.password):
+        raise HTTPException(status_code=400, detail='Invalid password')        
+        
+    return db_user
+
+
 def get_users(db: Session):
-    return db.query(User_orm).all()
+    return db.query(UserOrm).all()
+
+def get_user(db: Session, user_id):
+    return db.query(UserOrm).filter_by(id=user_id)

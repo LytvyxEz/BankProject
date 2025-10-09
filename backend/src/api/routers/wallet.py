@@ -4,7 +4,7 @@ from schemas import Wallet, WalletResponse, CreateWalletRequest, bank
 from uttils import try_except
 
 
-wallet_router = APIRouter(prefix='/wallet')
+wallet_router = APIRouter(prefix='/wallet', tags=['Wallet api'])
 
 @try_except
 @wallet_router.post(path='/create')
