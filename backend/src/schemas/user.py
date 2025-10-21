@@ -1,6 +1,12 @@
 from pydantic import EmailStr, BaseModel, Field, field_validator, model_validator
+from fastapi import HTTPException
+from string import punctuation
 
 from uttils import try_except, hash_password
+
+
+special_chars = punctuation
+
 
 class User:
     @try_except
@@ -27,20 +33,37 @@ class User:
 class UserRequest(BaseModel):
     username: str = Field(min_length=3)
     email: EmailStr = Field()
-    password: str = Field()
+    password: str = Field(min_length=8)
     
     
 class UserRequestRegister(BaseModel):
     username: str = Field(min_length=3)
     email: EmailStr
-    password: str
-    password2: str
+    password: str = Field(min_length=8)
+    password2: str = Field(min_length=8)
 
     @model_validator(mode='after')
     def check_passwords_match(self):
         if self.password != self.password2:
             raise ValueError("Passwords do not match")
         return self
+    
+    @field_validator('password')
+    def validate_password(cls, value: str):
+        if not any(char.isupper() for char in value):
+            raise HTTPException(400, "Password must have at least one uppercase letter")
+
+        if not any(char.islower() for char in value):
+            raise HTTPException(400, "Password must have at least one lowercase letter")
+
+        if not any(char.isdigit() for char in value):
+            raise HTTPException(400, "Password must have at least one digit")
+
+        if not any(char in special_chars for char in value):
+            raise HTTPException(400, "Password must have at least one special symbol")
+
+        return value
+            
 
 
 class UserResponse(BaseModel):

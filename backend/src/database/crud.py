@@ -9,7 +9,8 @@ from uttils import verify_password
 
 def create_user(user_data: dict, db: Session):
     db_user = db.query(UserOrm).filter(UserOrm.email == user_data["email"]).first()
-    db_user2 = db.query(UserOrm).filter(UserOrm.email == user_data["username"]).first()
+    db_user2 = db.query(UserOrm).filter(UserOrm.username == user_data["username"]).first()
+
     if db_user:
         raise HTTPException(status_code=400, detail="User with this email already exists")
     if db_user2:
